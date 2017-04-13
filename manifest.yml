@@ -1,0 +1,6 @@
+---
+applications:
+- buildpack: nodejs_buildpack
+  command: npm start
+  disk_quota: 64MB
+  memory: 64MB
