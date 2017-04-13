@@ -1,5 +1,6 @@
 require('dotenv').load();
 const express = require('express');
+const bodyParser = require('body-parser');
 const Cloudant = require('cloudant');
 const app = express();
 const port = process.env.PORT || 8080;
@@ -13,12 +14,14 @@ const cloudant = Cloudant({
   plugin: 'promises'
 });
 
-const listDbAll = () => {
-  cloudant.db
-    .list()
-    .then(data => console.log(data))
-    .catch(err => console.log(err));
-};
+// const listDbAll = () => {
+//   cloudant.db.list().then(data => console.log(data));
+// };
+
+async function listDbAll() {
+  const data = await cloudant.db.list();
+  return data;
+}
 
 const createDb = dbname => {
   cloudant.db
@@ -27,13 +30,25 @@ const createDb = dbname => {
       console.log(`Creating database '${dbname}'`);
       console.log(`Data: ${JSON.stringify(data, null, 2)}`);
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => console.log(err));
 };
 
-app.get('*', (req, res) => {
-  res.send('hello');
+const createDoc = (database, obj) => {
+  cloudant.db
+    .use(database)
+    .insert(obj)
+    .then(data => {
+      console.log(data);
+    })
+    .catch(e => console.log(e));
+};
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.post('/api/icons', (req, res) => {
+  createDoc('carbon-icons_test', req.body);
+  res.json(req.body);
 });
 
 app.listen(port, () => {
