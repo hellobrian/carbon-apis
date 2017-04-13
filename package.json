@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/hellobrian/carbon-apis/issues"
   },
-  "homepage": "https://github.com/hellobrian/carbon-apis#readme"
+  "homepage": "https://github.com/hellobrian/carbon-apis#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
 }
