@@ -43,12 +43,19 @@ module.exports = {
         const docs = data.rows.map(row => row.doc);
         response.json(docs);
       })
-      .catch(err => console.log(err));
+      .catch(e => console.log(e));
   },
   insert(dbName, obj) {
     cloudant.db
       .use(dbName)
       .insert(obj)
+      .then(data => console.log(data))
+      .catch(e => console.log(e));
+  },
+  destroy(dbName, docname, rev) {
+    cloudant.db
+      .use(dbName)
+      .destroy(docname, rev)
       .then(data => console.log(data))
       .catch(e => console.log(e));
   }

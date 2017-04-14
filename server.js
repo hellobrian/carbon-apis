@@ -16,6 +16,20 @@ app.post('/api/carbon-icons', (req, res) => {
   res.json(req.body);
 });
 
+app.delete('/api/carbon-icons/:name_or_rev', (req, res) => {
+  // db.destroy(
+  //   'carbon-icons_test',
+  //   'sup boo',
+  //   '1-a664ec460205629b2b6a1bd6e647d197'
+  // );
+  // res.send(req.params.name_or_rev);
+  res.send('TODO');
+});
+
+app.put('/api/carbon-icons/:name_or_rev', (req, res) => {
+  res.send('TODO');
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port} in ${process.env.NODE_ENV}`);
 });
