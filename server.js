@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('./lib');
+const dbDocs = require('./lib');
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -8,22 +8,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/api/carbon-icons', (req, res) => {
-  db.get('carbon-icons_test', res);
+  dbDocs.getAll(res);
+});
+
+app.get('/api/carbon-icons/:docId', (req, res) => {
+  dbDocs.get(req.params.docId, res);
 });
 
 app.post('/api/carbon-icons', (req, res) => {
-  db.insert('carbon-icons_test', req.body);
+  dbDocs.insert(req.body);
   res.json(req.body);
 });
 
-app.delete('/api/carbon-icons/:name_or_rev', (req, res) => {
-  // db.destroy(
-  //   'carbon-icons_test',
-  //   'sup boo',
-  //   '1-a664ec460205629b2b6a1bd6e647d197'
-  // );
-  // res.send(req.params.name_or_rev);
-  res.send('TODO');
+app.delete('/api/carbon-icons/:docId', (req, res) => {
+  dbDocs.destroy(req.params.docId, res);
 });
 
 app.put('/api/carbon-icons/:name_or_rev', (req, res) => {

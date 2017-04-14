@@ -5,6 +5,8 @@ const cloudant = require('cloudant')({
   plugin: 'promises'
 });
 
+const carbonIconsTest = cloudant.db.use('carbon-icons_test');
+
 /////////////////////////////////
 // Database
 //*******************************
@@ -32,9 +34,8 @@ const cloudant = require('cloudant')({
 //* insertDoc(database: String, obj: Object): insert a new document into database
 
 module.exports = {
-  get(dbName, response) {
-    cloudant.db
-      .use(dbName)
+  getAll(response) {
+    carbonIconsTest
       .list({
         include_docs: true,
         conflicts: true
@@ -45,18 +46,27 @@ module.exports = {
       })
       .catch(e => console.log(e));
   },
-  insert(dbName, obj) {
-    cloudant.db
-      .use(dbName)
+  get(docId, response) {
+    carbonIconsTest
+      .get(docId)
+      .then(data => {
+        console.log(data);
+        response.json(data);
+      })
+      .catch(e => console.log(e));
+  },
+  insert(obj) {
+    carbonIconsTest
       .insert(obj)
       .then(data => console.log(data))
       .catch(e => console.log(e));
   },
-  destroy(dbName, docname, rev) {
-    cloudant.db
-      .use(dbName)
-      .destroy(docname, rev)
-      .then(data => console.log(data))
-      .catch(e => console.log(e));
+  destroy(docId, response) {
+    carbonIconsTest.get(docId).then(doc => {
+      carbonIconsTest
+        .destroy(doc._id, doc._rev)
+        .then(data => response.json(data))
+        .catch(e => console.log(e));
+    });
   }
 };
